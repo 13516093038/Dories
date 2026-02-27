@@ -1,0 +1,11 @@
+﻿.idea
+.vscode
+Library
+Logs
+obj
+Temp
+UserSettings
+Assembly-CSharp.csproj
+*.csproj
+Dories.sln
+Dories.sln.DotSettings.user
