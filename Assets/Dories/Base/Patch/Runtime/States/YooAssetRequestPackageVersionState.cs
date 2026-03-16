@@ -18,7 +18,7 @@ namespace Dories.Base.Patch.Runtime.States
         {
             var operation = Owner.m_RequestPackageVersionOperation.RequestPackageVersion(package);
             await operation;
-
+            Owner.m_PackageVersion = operation.PackageVersion;
             ChangeState<YooAssetUpdatePackageManifestState>();
         }
     }

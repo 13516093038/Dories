@@ -10,12 +10,17 @@ namespace Dories.Base.Patch.Runtime.States
         {
             base.OnEnter();
 
-            InitTask(Owner.m_Package, Owner.m_PackageName).Forget();
+            InitTask(Owner.m_PackageName).Forget();
         }
 
-        private async UniTask InitTask(ResourcePackage package, string packageName)
+        private async UniTask InitTask(string packageName)
         {
-            var operation = Owner.m_InitOperation.Init(package, packageName);
+            // 创建资源包裹类
+            YooAssets.Initialize();
+            Owner.m_Package = YooAssets.TryGetPackage(packageName);
+            if (Owner.m_Package == null)
+                Owner.m_Package = YooAssets.CreatePackage(packageName);
+            var operation = Owner.m_InitOperation.Init(Owner.m_Package, packageName);
             await operation;
 
             ChangeState<YooAssetRequestPackageVersionState>();

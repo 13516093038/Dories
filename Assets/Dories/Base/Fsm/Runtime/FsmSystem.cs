@@ -48,7 +48,7 @@ namespace Dories.Base.Fsm.Runtime
       fsmInfo.States = new List<StateBase<T>>();
       foreach (var stateType in stateTypes)
       {
-        var state = ComponentFactory.Acquire<StateBase<T>>();
+        var state = ComponentFactory.Acquire(stateType) as StateBase<T>;
         state.Owner = owner;
         state.FsmSystem = this;
         state.OnInit();

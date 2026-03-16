@@ -32,7 +32,7 @@ namespace Dories.Base
                 PatchEntity.SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
                 PatchEntity.SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
                 PatchEntity.SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
-                PatchEntity.StartPatch();
+                PatchEntity.StartPatch("DefaultPackage");
             }
 
         }

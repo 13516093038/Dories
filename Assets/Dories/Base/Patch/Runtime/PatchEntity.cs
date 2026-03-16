@@ -78,8 +78,9 @@ namespace Dories.Base.Patch.Runtime
             m_ClearCacheBundleOperation = clearCacheBundleOperation;
         }
 
-        public void StartPatch()
+        public void StartPatch(string packageName)
         {
+            m_PackageName = packageName;
             m_FsmSystem.StartFsm(this, typeof(YooAssetInitState));
         }
     }
