@@ -24,16 +24,7 @@ namespace Dories.Base
         {
             var PatchEntity = ComponentFactory.Acquire<PatchEntity>();
 
-            if (m_PlayMode == EPlayMode.EditorSimulateMode)
-            {
-                PatchEntity.SetYooAssetInitoperation(new EditorInitOperation());
-                PatchEntity.SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
-                PatchEntity.SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
-                PatchEntity.SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
-                PatchEntity.SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
-                PatchEntity.SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
-                PatchEntity.StartPatch("DefaultPackage");
-            }
+           
 
         }
     }
