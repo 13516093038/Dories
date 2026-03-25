@@ -14,20 +14,20 @@ namespace Dories.Base.Patch.Runtime.States
         {
             foreach (var packageName in Owner.packagesNameList)
             {
-                if (Owner.m_Downloader == null)
+                if (Owner.m_Downloaders == null)
                 {
-                    Owner.m_Downloader =
-                        Owner.m_CreateDownloaderOperation.CreateDownloader(Owner.m_PackageInfoDic[packageName].Package);
+                    Owner.m_Downloaders = new();
                 }
-                else
-                {
-                    Owner.m_Downloader.Combine(
-                        Owner.m_CreateDownloaderOperation.CreateDownloader(Owner.m_PackageInfoDic[packageName]
-                            .Package));
-                }
+                Owner.m_Downloaders.Add(packageName, Owner.m_CreateDownloaderOperation.CreateDownloader(Owner.m_PackageInfoDic[packageName].Package));
+            }
+
+            int totalDownloadCount = 0;
+            foreach (var packageName in Owner.m_Downloaders)
+            {
+                totalDownloadCount +=  packageName.Value.TotalDownloadCount;
             }
             
-            if ( Owner.m_Downloader.TotalDownloadCount == 0)
+            if ( totalDownloadCount == 0)
             {
                 //无需下载
                 ChangeState<YooAssetDownloadFileOverState>();
@@ -35,7 +35,7 @@ namespace Dories.Base.Patch.Runtime.States
             else
             {
                 var onNeedUpdateCallback = Owner.m_CreateDownloaderOperation.GetOnNeedUpdateCallback();
-                onNeedUpdateCallback?.Invoke(Owner.m_Downloader.TotalDownloadCount, () =>
+                onNeedUpdateCallback?.Invoke(totalDownloadCount, () =>
                 {
                     //转换到下载资源状态
                     ChangeState<YooAssetDownloadPackageFilesState>();

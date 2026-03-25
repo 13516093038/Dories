@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Dories.Base.Fsm.Runtime;
 using YooAsset;
@@ -17,15 +18,28 @@ namespace Dories.Base.Patch.Runtime.States
 
         private async UniTaskVoid DownloadPackageFiles()
         {
-            Owner.m_Downloader.BeginDownload();
-            await Owner.m_Downloader;
-            if(Owner.m_Downloader.Status == EOperationStatus.Succeed)
+            List<UniTask> downloadTasks = new List<UniTask>();
+            foreach (var downloader in Owner.m_Downloaders)
             {
-                //下载成功
-                ChangeState<YooAssetDownloadFileOverState>();
+                downloader.Value.BeginDownload();
+                downloadTasks.Add(downloader.Value.ToUniTask());
             }
+            await UniTask.WhenAll(downloadTasks);
 
-            //下载失败直接走下载器的错误回调（YooAsset内置）
+            foreach (var downloadTask in Owner.m_Downloaders)
+            {
+                if (downloadTask.Value.Status == EOperationStatus.Succeed)
+                {
+                    continue;
+                }
+                else
+                {
+                    //下载失败直接走下载器的错误回调（YooAsset内置）
+                    return;
+                }
+            }
+            //下载成功
+            ChangeState<YooAssetDownloadFileOverState>();
         }
     }
 }

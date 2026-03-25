@@ -31,7 +31,7 @@ namespace Dories.Base.Patch.Runtime
         internal IYooAssetsDownloadFileOverOperation m_DownloadFileOverOperation;
         internal IYooAssetClearCacheBundleOperation m_ClearCacheBundleOperation;
         internal Dictionary<string, PackageInfo> m_PackageInfoDic;
-        internal ResourceDownloaderOperation m_Downloader;
+        internal Dictionary<string, ResourceDownloaderOperation> m_Downloaders;
         private FsmSystem m_FsmSystem;
         
 

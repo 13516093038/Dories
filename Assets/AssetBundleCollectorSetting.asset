@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowPackageView: 1
   ShowEditorAlias: 0
-  UniqueBundleName: 0
+  UniqueBundleName: 1
   Packages:
-  - PackageName: DefaultPackage
+  - PackageName: TestPackage1
     PackageDesc: 
     EnableAddressable: 0
     SupportExtensionless: 1
@@ -32,6 +32,28 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/Dories/Prefab/Cube.prefab
         CollectorGUID: a58336f1f9c864469813b5d8dc8ad0b9
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+  - PackageName: TestPackage2
+    PackageDesc: 
+    EnableAddressable: 0
+    SupportExtensionless: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Default Group
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Dories/Prefab/Cube 1.prefab
+        CollectorGUID: ed59e165feb3b4cb38ada807fa105ed2
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
