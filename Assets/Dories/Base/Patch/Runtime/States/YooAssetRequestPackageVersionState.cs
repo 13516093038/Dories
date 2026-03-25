@@ -11,14 +11,18 @@ namespace Dories.Base.Patch.Runtime.States
         {
             base.OnEnter();
 
-            RequestPackageVersionTask(Owner.m_Package).Forget();
+            RequestPackageVersionTask().Forget();
         }
 
-        private async UniTask RequestPackageVersionTask(ResourcePackage package)
+        private async UniTask RequestPackageVersionTask()
         {
-            var operation = Owner.m_RequestPackageVersionOperation.RequestPackageVersion(package);
-            await operation;
-            Owner.m_PackageVersion = operation.PackageVersion;
+            foreach (var packageName in Owner.packagesNameList)
+            {
+                var operation = Owner.m_RequestPackageVersionOperation.RequestPackageVersion(Owner.m_PackageInfoDic[packageName].Package);
+                await operation;
+                Owner.m_PackageInfoDic[packageName].PackageVersion = operation.PackageVersion;
+            }
+           
             ChangeState<YooAssetUpdatePackageManifestState>();
         }
     }

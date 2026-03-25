@@ -10,19 +10,24 @@ namespace Dories.Base.Patch.Runtime.States
         {
             base.OnEnter();
 
-            InitTask(Owner.m_PackageName).Forget();
+            InitTask().Forget();
         }
 
-        private async UniTask InitTask(string packageName)
+        private async UniTask InitTask()
         {
             // 创建资源包裹类
             YooAssets.Initialize();
-            Owner.m_Package = YooAssets.TryGetPackage(packageName);
-            if (Owner.m_Package == null)
-                Owner.m_Package = YooAssets.CreatePackage(packageName);
-            var operation = Owner.m_InitOperation.Init(Owner.m_Package, packageName);
-            await operation;
-
+            foreach (var packageName in Owner.packagesNameList)
+            {
+                var package = YooAssets.TryGetPackage(packageName);
+                if (package == null)
+                    package = YooAssets.CreatePackage(packageName);
+                var operation = Owner.m_InitOperation.Init(package, packageName, Owner.remoteServices);
+                await operation;
+                var packageInfo = new PackageInfo();
+                packageInfo.Package = package;
+                Owner.m_PackageInfoDic.Add(packageName, packageInfo);
+            }
             ChangeState<YooAssetRequestPackageVersionState>();
         }
     }

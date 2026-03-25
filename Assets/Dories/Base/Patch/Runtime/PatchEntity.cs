@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Dories.Base.Fsm.Runtime;
-using Dories.Base.Componentization.Runtime;
 using Dories.Base.Componentization.Runtime.Utils;
 using Dories.Base.Patch.Runtime.Operations.ClearCacheBundleOperation;
 using Dories.Base.Patch.Runtime.Operations.CreateDownloaderOperation;
@@ -9,14 +8,21 @@ using Dories.Base.Patch.Runtime.Operations.InitPackageOperation;
 using Dories.Base.Patch.Runtime.Operations.RequestPackageVersionOperation;
 using Dories.Base.Patch.Runtime.Operations.UpdatePackageManifestOperation;
 using Dories.Base.Patch.Runtime.Operations.DownloadFileOverOperation;
+using Dories.Base.Patch.Runtime.RemoteService;
 using Dories.Base.Patch.Runtime.States;
+using Sirenix.OdinInspector;
+using UnityEngine;
 using YooAsset;
 
 namespace Dories.Base.Patch.Runtime
 {
-    public class PatchEntity : Entity, IFsmOwner
+    public class PatchEntity : MonoBehaviour, IFsmOwner
     {
-        private FsmSystem m_FsmSystem;
+        [SerializeField] private PlayMode m_PlayMode;
+        [SerializeField, Title("AppPackagesName")] internal List<string> packagesNameList; 
+        
+        //todo:RemoteService
+        internal IRemoteServices remoteServices = new DefaultRemoteServices("asd", "ASd");
 
         internal IYooAssetInitOperation m_InitOperation;
         internal IYooAssetRequestPackageVersionOperation m_RequestPackageVersionOperation;
@@ -24,15 +30,14 @@ namespace Dories.Base.Patch.Runtime
         internal IYooAssetCreateDownloaderOperation m_CreateDownloaderOperation;
         internal IYooAssetsDownloadFileOverOperation m_DownloadFileOverOperation;
         internal IYooAssetClearCacheBundleOperation m_ClearCacheBundleOperation;
-
-        internal ResourcePackage m_Package;
-        internal string m_PackageName;
-        internal string m_PackageVersion;
-
+        internal Dictionary<string, PackageInfo> m_PackageInfoDic;
         internal ResourceDownloaderOperation m_Downloader;
+        private FsmSystem m_FsmSystem;
         
-        protected internal override void OnAcquire(object userData = null)
+
+        private void Awake()
         {
+            m_PackageInfoDic =  new Dictionary<string, PackageInfo>();
             m_FsmSystem = ComponentFactory.Acquire<FsmSystem>();
             m_FsmSystem.CreateFsm(this, new List<Type>
             {
@@ -46,7 +51,7 @@ namespace Dories.Base.Patch.Runtime
             });
         }
 
-        public void SetYooAssetInitoperation(IYooAssetInitOperation initOperation)
+        public void SetYooAssetInitOperation(IYooAssetInitOperation initOperation)
         {
             m_InitOperation = initOperation;
         }
@@ -78,9 +83,48 @@ namespace Dories.Base.Patch.Runtime
             m_ClearCacheBundleOperation = clearCacheBundleOperation;
         }
 
-        public void StartPatch(string packageName)
+        public void StartPatch()
         {
-            m_PackageName = packageName;
+            switch (m_PlayMode)
+            {
+                case PlayMode.EditorSimulateMode:
+                    SetYooAssetInitOperation(new EditorInitOperation());
+                    SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
+                    SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
+                    SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
+                    SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
+                    SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
+                    break;
+                
+                case PlayMode.OfflinePlayMode:
+                    SetYooAssetInitOperation(new OfflineInitOperation());
+                    SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
+                    SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
+                    SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
+                    SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
+                    SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
+                    break;
+                
+                case PlayMode.HostPlayMode:
+                    SetYooAssetInitOperation(new HostPlayInitOperation());
+                    SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
+                    SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
+                    SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
+                    SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
+                    SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
+                    break;
+                
+                case PlayMode.WeaKOnlinePlayMode:
+                    SetYooAssetInitOperation(new WeakOnlineInitOperation());
+                    SetYooAssetRequestPackageVersionOperation(new WeakOnlineRequestPackageVersionOperation());
+                    SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
+                    SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
+                    SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
+                    SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
+                    break;
+                case PlayMode.WeChatMiniGameMode:
+                    break;
+            }
             m_FsmSystem.StartFsm(this, typeof(YooAssetInitState));
         }
     }

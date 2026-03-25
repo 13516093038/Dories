@@ -1,5 +1,4 @@
 using Dories.Base.Fsm.Runtime;
-using YooAsset;
 
 namespace Dories.Base.Patch.Runtime.States
 {
@@ -8,17 +7,27 @@ namespace Dories.Base.Patch.Runtime.States
         public override void OnEnter()
         {
             base.OnEnter();
-
-            CreateDownloaderTask(Owner.m_Package);
+            CreateDownloaderTask();
         }
 
-        private void CreateDownloaderTask(ResourcePackage package)
+        private void CreateDownloaderTask()
         {
-            ResourceDownloaderOperation operation = Owner.m_CreateDownloaderOperation.CreateDownloader(package);
-
-            Owner.m_Downloader = operation;
-
-            if (operation.TotalDownloadCount == 0)
+            foreach (var packageName in Owner.packagesNameList)
+            {
+                if (Owner.m_Downloader == null)
+                {
+                    Owner.m_Downloader =
+                        Owner.m_CreateDownloaderOperation.CreateDownloader(Owner.m_PackageInfoDic[packageName].Package);
+                }
+                else
+                {
+                    Owner.m_Downloader.Combine(
+                        Owner.m_CreateDownloaderOperation.CreateDownloader(Owner.m_PackageInfoDic[packageName]
+                            .Package));
+                }
+            }
+            
+            if ( Owner.m_Downloader.TotalDownloadCount == 0)
             {
                 //无需下载
                 ChangeState<YooAssetDownloadFileOverState>();
@@ -26,9 +35,9 @@ namespace Dories.Base.Patch.Runtime.States
             else
             {
                 var onNeedUpdateCallback = Owner.m_CreateDownloaderOperation.GetOnNeedUpdateCallback();
-                onNeedUpdateCallback?.Invoke(operation.TotalDownloadCount, () =>
+                onNeedUpdateCallback?.Invoke(Owner.m_Downloader.TotalDownloadCount, () =>
                 {
-                    //抓换到下载资源状态
+                    //转换到下载资源状态
                     ChangeState<YooAssetDownloadPackageFilesState>();
                 });
             }

@@ -10,13 +10,20 @@ namespace Dories.Base.Patch.Runtime.States
         {
             base.OnEnter();
 
-            UpdatePackageManifestTask(Owner.m_Package, Owner.m_PackageVersion).Forget();
+            UpdatePackageManifestTask().Forget();
         }
 
-        private async UniTask UpdatePackageManifestTask(ResourcePackage package, string packageVersion)
+        private async UniTask UpdatePackageManifestTask()
         {
-            var operation = Owner.m_UpdatePackageManifestOperation.UpdatePackageManifest(package, packageVersion);
-            await operation;
+            foreach (var packageName in Owner.packagesNameList)
+            {
+                var packageInfo = Owner.m_PackageInfoDic[packageName];
+                var operation =
+                    Owner.m_UpdatePackageManifestOperation.UpdatePackageManifest(packageInfo.Package,
+                        packageInfo.PackageVersion);
+                await operation;
+            }
+          
             ChangeState<YooAssetCreateDownloaderState>();
         }
     }

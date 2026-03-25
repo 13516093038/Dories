@@ -7,6 +7,7 @@
 
 // 外部友元
 [assembly: InternalsVisibleTo("YooAsset.MiniGame")]
+[assembly: InternalsVisibleTo("YooAsset.DoriesExtension")]
 [assembly: InternalsVisibleTo("YooAsset.RuntimeExtension")]
 [assembly: InternalsVisibleTo("YooAsset.EditorExtension")]
 [assembly: InternalsVisibleTo("Assembly-CSharp-Editor")]

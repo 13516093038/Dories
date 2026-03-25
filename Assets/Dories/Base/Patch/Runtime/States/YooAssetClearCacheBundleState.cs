@@ -14,15 +14,20 @@ namespace Dories.Base.Patch.Runtime.States
 
         private async UniTaskVoid ClearCacheBundle()
         {
-            var operation = Owner.m_ClearCacheBundleOperation.ClearCacheBundle(Owner.m_Package);
-            await operation;
-            if(operation.Status == EOperationStatus.Succeed)
+            foreach (var packageName in Owner.packagesNameList)
             {
-                //清理成功
-            }
-            else
-            {
-                //清理失败
+                var packageInfo = Owner.m_PackageInfoDic[packageName];
+                var operation = Owner.m_ClearCacheBundleOperation.ClearCacheBundle(packageInfo.Package);
+                await operation;
+                if(operation.Status == EOperationStatus.Succeed)
+                {
+                    //清理成功
+                }
+                else
+                {
+                    //清理失败
+                    //operation.
+                }
             }
         }
     }

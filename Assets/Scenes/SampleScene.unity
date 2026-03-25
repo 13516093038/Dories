@@ -422,7 +422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b821d83ec495ae45bce2d08dba3cc73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayMode: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +480,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 899492534}
+  - component: {fileID: 899492535}
   m_Layer: 0
   m_Name: Patch
   m_TagString: Untagged
@@ -503,6 +503,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 465404976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &899492535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899492533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4d6266aef2a4916aed07172f8f77cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PlayMode: 0
+  packagesNameList:
+  - TestPackage1
+  - TestPackage2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

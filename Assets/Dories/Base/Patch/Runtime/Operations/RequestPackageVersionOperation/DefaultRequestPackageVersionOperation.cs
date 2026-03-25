@@ -1,3 +1,4 @@
+using Unity.Android.Types;
 using YooAsset;
 
 namespace Dories.Base.Patch.Runtime.Operations.RequestPackageVersionOperation

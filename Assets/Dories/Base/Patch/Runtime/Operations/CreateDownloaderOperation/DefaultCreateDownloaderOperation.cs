@@ -24,7 +24,7 @@ namespace Dories.Base.Patch.Runtime.Operations.CreateDownloaderOperation
             return this;
         }
 
-        public DefaultCreateDownloaderOperation BuildDowmloadingMaxNumber(int downloadingMaxNumber)
+        public DefaultCreateDownloaderOperation BuildDownloadingMaxNumber(int downloadingMaxNumber)
         {
             m_DownloadingMaxNum = downloadingMaxNumber;
             return this;

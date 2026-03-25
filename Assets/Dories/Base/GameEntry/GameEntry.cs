@@ -13,28 +13,28 @@ namespace Dories.Base
 {
     public class GameEntry : MonoBehaviour
     {
-        [SerializeField] private EPlayMode m_PlayMode;
-
-        private void Awake()
-        {
-            
-        }
-
-        private void Start()
-        {
-            var PatchEntity = ComponentFactory.Acquire<PatchEntity>();
-
-            if (m_PlayMode == EPlayMode.EditorSimulateMode)
-            {
-                PatchEntity.SetYooAssetInitoperation(new EditorInitOperation());
-                PatchEntity.SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
-                PatchEntity.SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
-                PatchEntity.SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
-                PatchEntity.SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
-                PatchEntity.SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
-                PatchEntity.StartPatch("DefaultPackage");
-            }
-
-        }
+        // [SerializeField] private EPlayMode m_PlayMode;
+        //
+        // private void Awake()
+        // {
+        //     
+        // }
+        //
+        // private void Start()
+        // {
+        //     var PatchEntity = ComponentFactory.Acquire<PatchEntity>();
+        //
+        //     if (m_PlayMode == EPlayMode.EditorSimulateMode)
+        //     {
+        //         PatchEntity.SetYooAssetInitoperation(new EditorInitOperation());
+        //         PatchEntity.SetYooAssetRequestPackageVersionOperation(new DefaultRequestPackageVersionOperation());
+        //         PatchEntity.SetYooAssetUpdatePackageManifestOperation(new DefaultUpdatePackageManifestOperation());
+        //         PatchEntity.SetYooAssetCreateDownloaderOperation(new DefaultCreateDownloaderOperation());
+        //         PatchEntity.SetYooAssetDownloadFileOverOperation(new DefaultDownloadFileOverOperation());
+        //         PatchEntity.SetYooAssetClearCacheBundleOperation(new DefaultClearCacheBundleOperation());
+        //         PatchEntity.StartPatch("DefaultPackage");
+        //     }
+        //
+        // }
     }
 }

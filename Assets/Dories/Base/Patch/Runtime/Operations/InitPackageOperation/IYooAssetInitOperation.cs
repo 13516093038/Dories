@@ -4,6 +4,6 @@ namespace Dories.Base.Patch.Runtime.Operations.InitPackageOperation
 {
     public interface IYooAssetInitOperation
     {
-        InitializationOperation Init(ResourcePackage package,string packageName);
+        InitializationOperation Init(ResourcePackage package, string packageName, IRemoteServices remoteServices);
     }
 }
